@@ -75,9 +75,8 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    acts_as_tenant (0.6.1)
-      rails (>= 5.2)
-      request_store (>= 1.0.5)
+    acts_as_tenant (1.0.1)
+      rails (>= 6.0)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     annotate (2.6.5)
@@ -142,6 +141,7 @@ GEM
     faker (3.8.0)
       i18n (>= 1.8.11, < 2)
     ffi (1.17.4-aarch64-linux-gnu)
+    ffi (1.17.4-x86_64-linux-gnu)
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
@@ -218,6 +218,8 @@ GEM
     nio4r (2.7.5)
     nokogiri (1.19.2-aarch64-linux-gnu)
       racc (~> 1.4)
+    nokogiri (1.19.2-x86_64-linux-gnu)
+      racc (~> 1.4)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
     pagy (8.6.3)
@@ -226,6 +228,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.6.3-aarch64-linux)
+    pg (1.6.3-x86_64-linux)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -296,8 +299,6 @@ GEM
     regexp_parser (2.12.0)
     reline (0.6.3)
       io-console (~> 0.5)
-    request_store (1.7.0)
-      rack (>= 1.4)
     responders (3.2.0)
       actionpack (>= 7.0)
       railties (>= 7.0)
@@ -394,8 +395,10 @@ GEM
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
     tailwindcss-ruby (4.2.2-aarch64-linux-gnu)
+    tailwindcss-ruby (4.2.2-x86_64-linux-gnu)
     thor (1.5.0)
     thruster (0.1.20-aarch64-linux)
+    thruster (0.1.20-x86_64-linux)
     timeout (0.6.1)
     tsort (0.2.0)
     turbo-rails (2.0.23)
@@ -426,9 +429,10 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  x86_64-linux
 
 DEPENDENCIES
-  acts_as_tenant (~> 0.6)
+  acts_as_tenant (~> 1.0)
   annotate
   bootsnap
   brakeman
