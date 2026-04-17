@@ -1,0 +1,27 @@
+<% can_edit = grading_instance.enabled? && grading_instance.entry_open? && !transcript&.locked? %>
+
+<% if grade&.persisted? %>
+  <% if can_edit %>
+    <%= form_with url: teachers_grade_path(grade), method: :patch,
+          data: { turbo_frame: "grade_cell_#{transcript&.id}_#{subject.id}_#{grading_instance.id}" } do |f| %>
+      <%= render "teachers/grades/input_field", f: f, grade: grade, grading_instance: grading_instance,
+            transcript: transcript, subject: subject, student: student %>
+    <% end %>
+  <% else %>
+    <span class="<%= grade.approved? ? 'text-green-600 font-semibold' : (grade.value.present? ? 'text-red-600' : 'text-gray-400') %>">
+      <%= grade.value.present? ? grade.value : "—" %>
+    </span>
+  <% end %>
+<% elsif can_edit && transcript %>
+  <%= form_with url: teachers_grades_path, method: :post,
+        data: { turbo_frame: "grade_cell_#{transcript.id}_#{subject.id}_#{grading_instance.id}" } do |f| %>
+    <%= f.hidden_field :transcript_id, value: transcript.id %>
+    <%= f.hidden_field :subject_id, value: subject.id %>
+    <%= f.hidden_field :grading_instance_id, value: grading_instance.id %>
+    <%= f.hidden_field :user_id, value: student.id %>
+    <%= render "teachers/grades/input_field", f: f, grade: Grade.new, grading_instance: grading_instance,
+          transcript: transcript, subject: subject, student: student %>
+  <% end %>
+<% else %>
+  <span class="text-gray-300">—</span>
+<% end %>

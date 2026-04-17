@@ -1,0 +1,16 @@
+<% if grading_instance.numeric? %>
+  <%= f.number_field :numeric_value,
+        value: grade.numeric_value,
+        step: 0.01,
+        min: Current.school.min_grade,
+        max: Current.school.max_grade,
+        class: "w-20 text-center px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500",
+        data: { action: "blur->grade-entry#submit" } %>
+<% else %>
+  <%= f.text_field :conceptual_value,
+        value: grade.conceptual_value,
+        class: "w-24 text-center px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500",
+        data: { action: "blur->grade-entry#submit" } %>
+<% end %>
+<%= f.hidden_field :numeric_value, value: nil   if grading_instance.conceptual? %>
+<%= f.hidden_field :conceptual_value, value: nil if grading_instance.numeric? %>

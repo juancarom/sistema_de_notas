@@ -1,0 +1,39 @@
+<% content_for :title, "Materias" %>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">Materias</h1>
+  <%= link_to "Nueva materia", new_admin_subject_path, class: "btn-primary" %>
+</div>
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 border-b border-gray-200">
+      <tr>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Nombre</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Código</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Estado</th>
+        <th class="px-4 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @subjects.each do |subject| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-medium text-gray-800"><%= subject.name %></td>
+          <td class="px-4 py-3 text-gray-500"><%= subject.code.presence || "—" %></td>
+          <td class="px-4 py-3">
+            <span class="text-xs px-2 py-0.5 rounded-full <%= subject.active? ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' %>">
+              <%= subject.active? ? "Activa" : "Inactiva" %>
+            </span>
+          </td>
+          <td class="px-4 py-3 text-right space-x-2">
+            <%= link_to "Editar", edit_admin_subject_path(subject), class: "text-indigo-600 hover:underline text-xs" %>
+            <%= button_to "Eliminar", admin_subject_path(subject), method: :delete,
+                  data: { turbo_confirm: "¿Eliminar #{subject.name}?" },
+                  class: "text-xs text-red-500 hover:text-red-700" %>
+          </td>
+        </tr>
+      <% end %>
+      <% if @subjects.empty? %>
+        <tr><td colspan="4" class="px-4 py-6 text-center text-gray-400">No hay materias creadas.</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

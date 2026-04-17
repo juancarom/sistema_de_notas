@@ -1,0 +1,37 @@
+<% content_for :title, "Cursos" %>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">Cursos</h1>
+  <%= link_to "Nuevo curso", new_admin_course_path, class: "btn-primary" %>
+</div>
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 border-b border-gray-200">
+      <tr>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Nombre</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Plan</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Año</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Turno</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Ciclo</th>
+        <th class="px-4 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @courses.each do |course| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-medium text-gray-800"><%= course.name %></td>
+          <td class="px-4 py-3 text-gray-600 text-xs"><%= course.study_plan.name %></td>
+          <td class="px-4 py-3 text-gray-600"><%= course.year_in_plan %>°</td>
+          <td class="px-4 py-3 text-gray-600"><%= course.shift_label %></td>
+          <td class="px-4 py-3 text-gray-600"><%= course.academic_year %></td>
+          <td class="px-4 py-3 text-right space-x-2">
+            <%= link_to "Ver", admin_course_path(course), class: "text-indigo-600 hover:underline text-xs" %>
+            <%= link_to "Editar", edit_admin_course_path(course), class: "text-gray-600 hover:underline text-xs" %>
+          </td>
+        </tr>
+      <% end %>
+      <% if @courses.empty? %>
+        <tr><td colspan="6" class="px-4 py-6 text-center text-gray-400">No hay cursos creados.</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

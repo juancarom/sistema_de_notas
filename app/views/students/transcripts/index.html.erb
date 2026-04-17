@@ -1,0 +1,24 @@
+<% content_for :title, "Analíticos" %>
+<div class="mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">Analíticos</h1>
+</div>
+<% if @transcripts.any? %>
+  <div class="space-y-3">
+    <% @transcripts.each do |transcript| %>
+      <%= link_to students_transcript_path(transcript),
+            class: "block bg-white rounded-xl shadow hover:shadow-md transition p-4" do %>
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-gray-800">Ciclo <%= transcript.academic_year %></span>
+            <span class="text-sm text-gray-500 ml-3"><%= transcript.enrollment.course&.name || "Terciario" %></span>
+          </div>
+          <% if transcript.locked? %>
+            <span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded">Cerrado</span>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="bg-white rounded-xl shadow p-8 text-center text-gray-400">Sin analíticos disponibles.</div>
+<% end %>

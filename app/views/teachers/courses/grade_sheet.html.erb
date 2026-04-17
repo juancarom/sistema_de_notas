@@ -1,0 +1,64 @@
+<% content_for :title, "Planilla — #{@subject&.name}" %>
+
+<div class="flex items-center gap-3 mb-4">
+  <%= link_to "← #{@course.name}", teachers_course_path(@course), class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <h1 class="text-2xl font-bold text-gray-800"><%= @subject&.name %></h1>
+  <span class="text-sm text-gray-500"><%= @course.name %> · <%= @course.academic_year %></span>
+</div>
+
+<%# Subject selector %>
+<div class="mb-4 flex gap-2 flex-wrap">
+  <% @subjects.each do |subj| %>
+    <%= link_to subj.name,
+          grade_sheet_teachers_course_path(@course, subject_id: subj.id),
+          class: "px-3 py-1.5 text-sm rounded-lg #{subj.id == @subject&.id ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'}" %>
+  <% end %>
+</div>
+
+<% if @subject.nil? %>
+  <p class="text-gray-400">Seleccioná una materia para ver la planilla.</p>
+<% elsif @enrollments.empty? %>
+  <p class="text-gray-400 bg-white rounded-xl shadow p-6">No hay alumnos inscriptos en este curso.</p>
+<% elsif @grading_instances.empty? %>
+  <p class="text-gray-400 bg-white rounded-xl shadow p-6">No hay instancias de notas habilitadas para este plan y ciclo.</p>
+<% else %>
+  <div class="bg-white rounded-xl shadow overflow-x-auto">
+    <table class="text-sm w-full">
+      <thead class="bg-gray-50 border-b border-gray-200">
+        <tr>
+          <th class="text-left px-4 py-3 font-medium text-gray-600 sticky left-0 bg-gray-50 min-w-[180px]">Alumno</th>
+          <% @grading_instances.each do |gi| %>
+            <th class="text-center px-3 py-3 font-medium text-gray-600 min-w-[130px]">
+              <%= gi.name %>
+              <% unless gi.entry_open? %>
+                <span class="block text-xs font-normal text-gray-400">Cerrada</span>
+              <% end %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <% @enrollments.each do |enrollment| %>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-medium text-gray-800 sticky left-0 bg-white">
+              <%= enrollment.user.full_name %>
+            </td>
+            <% @grading_instances.each do |gi| %>
+              <td class="px-3 py-2 text-center">
+                <% grade = enrollment.transcript&.grades&.find { |g| g.subject_id == @subject.id && g.grading_instance_id == gi.id } %>
+                <%= turbo_frame_tag "grade_cell_#{enrollment.transcript&.id}_#{@subject.id}_#{gi.id}" do %>
+                  <%= render "teachers/grades/cell",
+                        grade: grade,
+                        transcript: enrollment.transcript,
+                        subject: @subject,
+                        grading_instance: gi,
+                        student: enrollment.user %>
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

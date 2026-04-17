@@ -1,0 +1,61 @@
+<% content_for :title, "Instancias de Notas" %>
+
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-bold text-gray-800">Instancias de Notas</h1>
+  <%= link_to "Nueva instancia", new_admin_grading_instance_path, class: "btn-primary" %>
+</div>
+
+<div class="mb-4 flex items-center gap-3">
+  <label class="text-sm text-gray-600">Filtrar por plan:</label>
+  <%= form_with url: admin_grading_instances_path, method: :get, class: "flex gap-2" do |f| %>
+    <%= f.select :study_plan_id, @study_plans.map { |p| [p.name, p.id] },
+          { include_blank: "Todos los planes", selected: params[:study_plan_id] },
+          class: "px-3 py-2 border border-gray-300 rounded-lg text-sm",
+          onchange: "this.form.submit()" %>
+  <% end %>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 border-b border-gray-200">
+      <tr>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Nombre</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Plan</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Ciclo</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Tipo</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Final</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Estado</th>
+        <th class="px-4 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @grading_instances.each do |gi| %>
+        <tr id="grading_instance_<%= gi.id %>" class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-medium text-gray-800"><%= gi.name %></td>
+          <td class="px-4 py-3 text-gray-500 text-xs"><%= gi.study_plan.name %></td>
+          <td class="px-4 py-3 text-gray-600"><%= gi.academic_year %></td>
+          <td class="px-4 py-3 text-gray-600 capitalize"><%= gi.grade_type %></td>
+          <td class="px-4 py-3">
+            <% if gi.is_final? %>
+              <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">Final</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-3">
+            <span class="text-xs px-2 py-0.5 rounded-full <%= gi.enabled? ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' %>">
+              <%= gi.enabled? ? "Habilitada" : "Deshabilitada" %>
+            </span>
+          </td>
+          <td class="px-4 py-3 text-right space-x-2">
+            <%= button_to gi.enabled? ? "Deshabilitar" : "Habilitar",
+                  toggle_enabled_admin_grading_instance_path(gi), method: :patch,
+                  class: "text-xs text-indigo-600 hover:underline" %>
+            <%= link_to "Editar", edit_admin_grading_instance_path(gi), class: "text-xs text-gray-500 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
+      <% if @grading_instances.empty? %>
+        <tr><td colspan="7" class="px-4 py-6 text-center text-gray-400">Sin instancias creadas.</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

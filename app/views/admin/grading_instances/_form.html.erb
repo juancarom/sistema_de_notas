@@ -1,0 +1,19 @@
+<%= simple_form_for [:admin, grading_instance] do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :study_plan_id, label: "Plan de estudio", as: :select,
+        collection: @study_plans.map { |p| [p.name, p.id] }, include_blank: "Seleccioná un plan" %>
+  <%= f.input :name,          label: "Nombre", hint: "Ej: 1° Trimestre, Final" %>
+  <%= f.input :position,      label: "Posición (orden)", as: :integer %>
+  <%= f.input :grade_type,    label: "Tipo de nota", as: :select,
+        collection: GradingInstance.grade_types.keys.map { |t| [t.capitalize, t] } %>
+  <%= f.input :academic_year, label: "Ciclo lectivo", as: :integer %>
+  <%= f.input :is_final,      label: "¿Es la nota final?" %>
+  <%= f.input :entry_open_at,  label: "Apertura de carga",  as: :datetime, required: false %>
+  <%= f.input :entry_close_at, label: "Cierre de carga",    as: :datetime, required: false %>
+  <%= f.input :visible_from,   label: "Visible desde",      as: :datetime, required: false %>
+  <%= f.input :visible_until,  label: "Visible hasta",      as: :datetime, required: false %>
+  <div class="flex gap-3 mt-4">
+    <%= f.button :submit, grading_instance.new_record? ? "Crear instancia" : "Guardar cambios" %>
+    <%= link_to "Cancelar", admin_grading_instances_path, class: "px-4 py-2 text-sm text-gray-600" %>
+  </div>
+<% end %>

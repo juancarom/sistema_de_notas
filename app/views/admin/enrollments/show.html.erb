@@ -1,0 +1,48 @@
+<% content_for :title, "Matrícula #{@enrollment.user.full_name}" %>
+
+<div class="flex items-center gap-3 mb-6">
+  <%= link_to "← Matrículas", admin_enrollments_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <h1 class="text-2xl font-bold text-gray-800"><%= @enrollment.user.full_name %></h1>
+  <span class="text-sm text-gray-500">Ciclo <%= @enrollment.academic_year %></span>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="bg-white rounded-xl shadow p-5">
+    <h2 class="font-semibold text-gray-700 mb-3">Datos de la matrícula</h2>
+    <dl class="space-y-2 text-sm">
+      <div class="flex gap-2"><dt class="text-gray-500 w-24">Curso</dt><dd><%= @enrollment.course&.name || "Sin curso" %></dd></div>
+      <div class="flex gap-2"><dt class="text-gray-500 w-24">Estado</dt><dd><%= @enrollment.status %></dd></div>
+      <div class="flex gap-2"><dt class="text-gray-500 w-24">Analítico</dt>
+        <dd>
+          <% if @transcript %>
+            <%= link_to "Ver analítico", students_transcript_path(@transcript), class: "text-indigo-600 hover:underline" %>
+            <% if @transcript.locked? %><span class="text-xs text-red-500 ml-2">Cerrado</span><% end %>
+          <% else %>
+            Sin analítico
+          <% end %>
+        </dd>
+      </div>
+    </dl>
+    <div class="mt-4 flex gap-3">
+      <%= link_to "Editar", edit_admin_enrollment_path(@enrollment), class: "text-sm text-indigo-600 hover:underline" %>
+      <%= button_to "Desactivar matrícula", admin_enrollment_path(@enrollment), method: :delete,
+            data: { turbo_confirm: "¿Desactivar esta matrícula?" },
+            class: "text-sm text-red-500 hover:text-red-700" %>
+    </div>
+  </div>
+
+  <% if @enrollment.course_id.nil? && @subject_enrollments %>
+    <div class="bg-white rounded-xl shadow p-5">
+      <h2 class="font-semibold text-gray-700 mb-3">Materias inscriptas (terciario)</h2>
+      <ul class="space-y-1 text-sm mb-4">
+        <% @subject_enrollments.each do |se| %>
+          <li class="flex items-center justify-between">
+            <span><%= se.subject.name %></span>
+            <%= button_to "Desinscribir", unenroll_subject_admin_enrollment_path(@enrollment, subject_id: se.subject_id),
+                  method: :delete, class: "text-xs text-red-500 hover:text-red-700" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,18 @@
+<%= simple_form_for [:admin, course] do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :name,         label: "Nombre del curso", hint: "Ej: 1° A, 2° B" %>
+  <%= f.input :study_plan_id, label: "Plan de estudio", as: :select,
+        collection: @study_plans.map { |p| [p.name, p.id] }, include_blank: "Seleccioná un plan" %>
+  <%= f.input :year_in_plan,  label: "Año en el plan",  as: :integer %>
+  <%= f.input :academic_year, label: "Ciclo lectivo",   as: :integer, hint: "Año calendario, ej: 2025" %>
+  <%= f.input :shift,         label: "Turno",           as: :select,
+        collection: Course.shifts.keys.map { |s| [Course::SHIFT_LABELS[s], s] },
+        include_blank: "Seleccioná el turno" %>
+  <%= f.input :active, label: "Activo" %>
+  <div class="flex gap-3 mt-4">
+    <%= f.button :submit, course.new_record? ? "Crear curso" : "Guardar cambios" %>
+    <%= link_to "Cancelar",
+          course.new_record? ? admin_courses_path : admin_course_path(course),
+          class: "px-4 py-2 text-sm text-gray-600 hover:text-gray-800" %>
+  </div>
+<% end %>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= current_school&.name || "Sistema de Notas" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="bg-gray-50 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md px-4">
+      <% if current_school %>
+        <div class="text-center mb-8">
+          <% if current_school.logo.attached? %>
+            <%= image_tag current_school.logo.variant(resize_to_limit: [200, 80]), class: "mx-auto mb-3" %>
+          <% end %>
+          <h1 class="text-2xl font-bold text-gray-800"><%= current_school.name %></h1>
+        </div>
+      <% end %>
+
+      <% flash.each do |type, message| %>
+        <div class="mb-4 p-3 rounded <%= type == 'alert' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' %>">
+          <%= message %>
+        </div>
+      <% end %>
+
+      <%= yield %>
+    </div>
+  </body>
+</html>

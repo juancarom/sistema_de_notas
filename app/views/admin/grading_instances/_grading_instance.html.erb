@@ -1,0 +1,22 @@
+<tr id="grading_instance_<%= grading_instance.id %>" class="hover:bg-gray-50">
+  <td class="px-4 py-3 font-medium text-gray-800"><%= grading_instance.name %></td>
+  <td class="px-4 py-3 text-gray-500 text-xs"><%= grading_instance.study_plan.name %></td>
+  <td class="px-4 py-3 text-gray-600"><%= grading_instance.academic_year %></td>
+  <td class="px-4 py-3 text-gray-600 capitalize"><%= grading_instance.grade_type %></td>
+  <td class="px-4 py-3">
+    <% if grading_instance.is_final? %>
+      <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">Final</span>
+    <% end %>
+  </td>
+  <td class="px-4 py-3">
+    <span class="text-xs px-2 py-0.5 rounded-full <%= grading_instance.enabled? ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' %>">
+      <%= grading_instance.enabled? ? "Habilitada" : "Deshabilitada" %>
+    </span>
+  </td>
+  <td class="px-4 py-3 text-right space-x-2">
+    <%= button_to grading_instance.enabled? ? "Deshabilitar" : "Habilitar",
+          toggle_enabled_admin_grading_instance_path(grading_instance), method: :patch,
+          class: "text-xs text-indigo-600 hover:underline" %>
+    <%= link_to "Editar", edit_admin_grading_instance_path(grading_instance), class: "text-xs text-gray-500 hover:underline" %>
+  </td>
+</tr>

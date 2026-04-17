@@ -1,0 +1,8 @@
+<% content_for :title, "Editar #{@course.name}" %>
+<div class="mb-6">
+  <%= link_to "← #{@course.name}", admin_course_path(@course), class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <h1 class="text-2xl font-bold text-gray-800 mt-1">Editar curso</h1>
+</div>
+<div class="bg-white rounded-xl shadow p-6 max-w-lg">
+  <%= render "form", course: @course %>
+</div>

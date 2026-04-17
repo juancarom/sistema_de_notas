@@ -1,0 +1,61 @@
+# Sistema de Notas Educación — Kamal Deploy Config
+# Before first deploy, fill in:
+#   1. Replace YOUR_DOCKERHUB_USERNAME with your Docker Hub username
+#   2. Replace YOUR_DOMAIN with your app domain (e.g. notas.midominio.com)
+#   3. Set secrets in .kamal/secrets
+
+service: sistema-notas
+image: YOUR_DOCKERHUB_USERNAME/sistema-notas
+
+servers:
+  web:
+    - 157.230.0.32
+  job:
+    hosts:
+      - 157.230.0.32
+    cmd: bin/jobs
+
+proxy:
+  ssl: true
+  host: YOUR_DOMAIN
+  app_port: 3000
+
+registry:
+  server: docker.io
+  username: YOUR_DOCKERHUB_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+
+ssh:
+  user: root
+
+env:
+  clear:
+    RAILS_ENV: production
+    DATABASE_URL: postgresql://sistema_notas:$SISTEMA_NOTAS_DB_PASSWORD@sistema-notas-db/sistema_notas_production
+    SOLID_QUEUE_IN_PUMA: true
+  secret:
+    - RAILS_MASTER_KEY
+    - SISTEMA_NOTAS_DB_PASSWORD
+
+volumes:
+  - "sistema_notas_storage:/rails/storage"
+
+asset_path: /rails/public/assets
+
+accessories:
+  db:
+    image: postgres:16-alpine
+    host: 157.230.0.32
+    port: 127.0.0.1:5432:5432
+    env:
+      clear:
+        POSTGRES_DB: sistema_notas_production
+        POSTGRES_USER: sistema_notas
+      secret:
+        - SISTEMA_NOTAS_DB_PASSWORD_AS_POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data

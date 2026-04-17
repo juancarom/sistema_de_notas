@@ -1,0 +1,111 @@
+<% content_for :title, @study_plan.name %>
+
+<div class="flex items-center gap-3 mb-6">
+  <%= link_to "← Planes", admin_study_plans_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <h1 class="text-2xl font-bold text-gray-800"><%= @study_plan.name %></h1>
+  <span class="text-sm text-gray-500"><%= @study_plan.level_label %> · <%= @study_plan.duration_years %> años</span>
+  <%= link_to "Editar plan", edit_admin_study_plan_path(@study_plan), class: "ml-auto text-sm text-indigo-600 hover:underline" %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <%# Materias por año %>
+  <div class="bg-white rounded-xl shadow p-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-semibold text-gray-700">Materias del plan</h2>
+      <%= link_to "+ Agregar materia", new_admin_study_plan_study_plan_subject_path(@study_plan),
+            class: "text-sm text-indigo-600 hover:underline" %>
+    </div>
+    <% if @subjects_by_year.any? %>
+      <% @subjects_by_year.each do |year, sps| %>
+        <div class="mb-4">
+          <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Año <%= year %></p>
+          <ul class="space-y-1">
+            <% sps.each do |sp| %>
+              <li class="flex items-center justify-between text-sm">
+                <span><%= sp.subject.name %></span>
+                <div class="flex gap-2">
+                  <%= link_to "Editar", edit_admin_study_plan_subject_path(sp), class: "text-xs text-gray-400 hover:text-gray-700" %>
+                  <%= button_to "Quitar", admin_study_plan_subject_path(sp), method: :delete,
+                        data: { turbo_confirm: "¿Quitar #{sp.subject.name} del plan?" },
+                        class: "text-xs text-red-400 hover:text-red-600" %>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-sm text-gray-400">Sin materias cargadas.</p>
+    <% end %>
+  </div>
+
+  <%# Instancias de notas %>
+  <div class="bg-white rounded-xl shadow p-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-semibold text-gray-700">Instancias de notas</h2>
+      <%= link_to "+ Nueva instancia", new_admin_grading_instance_path(study_plan_id: @study_plan.id),
+            class: "text-sm text-indigo-600 hover:underline" %>
+    </div>
+    <% if @grading_instances.any? %>
+      <% @grading_instances.group_by(&:academic_year).each do |year, instances| %>
+        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Año <%= year %></p>
+        <ul class="space-y-1 mb-4">
+          <% instances.each do |gi| %>
+            <li class="flex items-center justify-between text-sm" id="grading_instance_<%= gi.id %>">
+              <span><%= gi.name %> <span class="text-gray-400 text-xs">(<%= gi.grade_type %>)</span></span>
+              <div class="flex gap-2 items-center">
+                <span class="text-xs <%= gi.enabled? ? 'text-green-600' : 'text-gray-400' %>">
+                  <%= gi.enabled? ? "Habilitada" : "Deshabilitada" %>
+                </span>
+                <%= button_to gi.enabled? ? "Deshabilitar" : "Habilitar",
+                      toggle_enabled_admin_grading_instance_path(gi), method: :patch,
+                      class: "text-xs text-indigo-600 hover:underline" %>
+                <%= link_to "Editar", edit_admin_grading_instance_path(gi), class: "text-xs text-gray-400 hover:text-gray-700" %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% else %>
+      <p class="text-sm text-gray-400">Sin instancias creadas.</p>
+    <% end %>
+  </div>
+</div>
+
+<%# Cursos %>
+<div class="bg-white rounded-xl shadow p-5 mt-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="font-semibold text-gray-700">Cursos</h2>
+    <%= link_to "+ Nuevo curso", new_admin_course_path(study_plan_id: @study_plan.id),
+          class: "text-sm text-indigo-600 hover:underline" %>
+  </div>
+  <% if @courses.any? %>
+    <table class="w-full text-sm">
+      <thead class="text-gray-500 text-xs uppercase border-b border-gray-100">
+        <tr>
+          <th class="text-left py-2">Nombre</th>
+          <th class="text-left py-2">Año del plan</th>
+          <th class="text-left py-2">Turno</th>
+          <th class="text-left py-2">Ciclo lectivo</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <% @courses.each do |course| %>
+          <tr>
+            <td class="py-2 font-medium"><%= course.name %></td>
+            <td class="py-2 text-gray-600"><%= course.year_in_plan %>°</td>
+            <td class="py-2 text-gray-600"><%= course.shift_label %></td>
+            <td class="py-2 text-gray-600"><%= course.academic_year %></td>
+            <td class="py-2 text-right">
+              <%= link_to "Ver", admin_course_path(course), class: "text-indigo-600 hover:underline text-xs mr-2" %>
+              <%= link_to "Editar", edit_admin_course_path(course), class: "text-gray-500 hover:underline text-xs" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="text-sm text-gray-400">Sin cursos creados.</p>
+  <% end %>
+</div>

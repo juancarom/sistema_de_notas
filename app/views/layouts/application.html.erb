@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || current_school&.name || "Sistema de Notas" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50">
+    <%= render "shared/navbar" %>
+
+    <% flash.each do |type, message| %>
+      <div class="max-w-7xl mx-auto px-4 mt-2">
+        <div class="p-3 rounded text-sm <%= type == 'alert' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' %>">
+          <%= message %>
+        </div>
+      </div>
+    <% end %>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+      <%= yield %>
+    </main>
+  </body>
+</html>

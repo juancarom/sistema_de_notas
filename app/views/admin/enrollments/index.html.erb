@@ -1,0 +1,54 @@
+<% content_for :title, "Matrículas" %>
+
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-bold text-gray-800">Matrículas</h1>
+  <%= link_to "Nueva matrícula", new_admin_enrollment_path, class: "btn-primary" %>
+</div>
+
+<div class="mb-4 flex items-center gap-3 flex-wrap">
+  <%= form_with url: admin_enrollments_path, method: :get, class: "flex gap-2 flex-wrap" do |f| %>
+    <%= f.select :year, @years.map { |y| [y, y] },
+          { include_blank: "Todos los ciclos", selected: params[:year] },
+          class: "px-3 py-2 border border-gray-300 rounded-lg text-sm",
+          onchange: "this.form.submit()" %>
+    <%= f.select :course_id, @courses.map { |c| ["#{c.name} (#{c.study_plan.name})", c.id] },
+          { include_blank: "Todos los cursos", selected: params[:course_id] },
+          class: "px-3 py-2 border border-gray-300 rounded-lg text-sm",
+          onchange: "this.form.submit()" %>
+  <% end %>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 border-b border-gray-200">
+      <tr>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Alumno</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Curso</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Ciclo</th>
+        <th class="text-left px-4 py-3 font-medium text-gray-600">Estado</th>
+        <th class="px-4 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @enrollments.each do |enrollment| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-medium text-gray-800"><%= enrollment.user.full_name %></td>
+          <td class="px-4 py-3 text-gray-600"><%= enrollment.course&.name || "Sin curso (terciario)" %></td>
+          <td class="px-4 py-3 text-gray-600"><%= enrollment.academic_year %></td>
+          <td class="px-4 py-3">
+            <% colors = { "active" => "bg-green-100 text-green-700", "graduated" => "bg-blue-100 text-blue-700", "withdrawn" => "bg-gray-100 text-gray-500" } %>
+            <span class="text-xs px-2 py-0.5 rounded-full <%= colors[enrollment.status] %>">
+              <%= { "active" => "Activo", "graduated" => "Egresado", "withdrawn" => "Baja" }[enrollment.status] %>
+            </span>
+          </td>
+          <td class="px-4 py-3 text-right">
+            <%= link_to "Ver", admin_enrollment_path(enrollment), class: "text-indigo-600 hover:underline text-xs" %>
+          </td>
+        </tr>
+      <% end %>
+      <% if @enrollments.empty? %>
+        <tr><td colspan="5" class="px-4 py-6 text-center text-gray-400">Sin matrículas.</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

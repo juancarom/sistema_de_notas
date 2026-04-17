@@ -1,0 +1,18 @@
+<%= simple_form_for [:admin, study_plan] do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :name,           label: "Nombre del plan" %>
+  <%= f.input :level,          label: "Nivel",           as: :select,
+              collection: StudyPlan.levels.keys.map { |l| [StudyPlan::LEVEL_LABELS[l], l] },
+              include_blank: "Seleccioná el nivel" %>
+  <%= f.input :plan_type,      label: "Tipo de plan",    hint: "Ej: Bachiller, Tecnicatura, Profesorado" %>
+  <%= f.input :duration_years, label: "Duración (años)", as: :integer %>
+  <%= f.input :start_year,     label: "Año de inicio",   as: :integer %>
+  <%= f.input :active,         label: "Activo" %>
+
+  <div class="flex gap-3 mt-4">
+    <%= f.button :submit, study_plan.new_record? ? "Crear plan" : "Guardar cambios" %>
+    <%= link_to "Cancelar",
+          study_plan.new_record? ? admin_study_plans_path : admin_study_plan_path(study_plan),
+          class: "px-4 py-2 text-sm text-gray-600 hover:text-gray-800" %>
+  </div>
+<% end %>

@@ -1,0 +1,35 @@
+<% content_for :title, "Editar configuración" %>
+<div class="mb-6">
+  <%= link_to "← Configuración", admin_school_settings_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <h1 class="text-2xl font-bold text-gray-800 mt-1">Editar configuración</h1>
+</div>
+<div class="bg-white rounded-xl shadow p-6 max-w-2xl">
+  <%= simple_form_for @school, url: admin_school_settings_path, method: :patch do |f| %>
+    <%= f.error_notification %>
+    <div class="grid grid-cols-2 gap-x-4">
+      <%= f.input :name,    label: "Nombre de la institución" %>
+      <%= f.input :city,    label: "Ciudad" %>
+      <%= f.input :province, label: "Provincia" %>
+      <%= f.input :postal_code, label: "Código postal" %>
+      <%= f.input :address, label: "Dirección" %>
+      <%= f.input :phone,   label: "Teléfono" %>
+      <%= f.input :contact_email, label: "Email de contacto" %>
+      <%= f.input :website, label: "Sitio web" %>
+    </div>
+    <div class="border-t border-gray-100 my-4"></div>
+    <h3 class="font-medium text-gray-700 mb-3">Escala de notas</h3>
+    <div class="grid grid-cols-3 gap-x-4">
+      <%= f.input :min_grade,     label: "Nota mínima",     as: :decimal %>
+      <%= f.input :passing_grade, label: "Nota de aprobación", as: :decimal %>
+      <%= f.input :max_grade,     label: "Nota máxima",     as: :decimal %>
+    </div>
+    <div class="border-t border-gray-100 my-4"></div>
+    <h3 class="font-medium text-gray-700 mb-3">Imágenes</h3>
+    <%= f.input :logo,   label: "Logo (JPG/PNG)",   as: :file %>
+    <%= f.input :banner, label: "Banner de fondo",   as: :file %>
+    <div class="flex gap-3 mt-4">
+      <%= f.button :submit, "Guardar configuración" %>
+      <%= link_to "Cancelar", admin_school_settings_path, class: "px-4 py-2 text-sm text-gray-600" %>
+    </div>
+  <% end %>
+</div>

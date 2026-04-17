@@ -1,0 +1,8 @@
+<% content_for :title, "Nueva instancia de notas" %>
+<div class="mb-6">
+  <%= link_to "← Instancias", admin_grading_instances_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <h1 class="text-2xl font-bold text-gray-800 mt-1">Nueva instancia de notas</h1>
+</div>
+<div class="bg-white rounded-xl shadow p-6 max-w-lg">
+  <%= render "form", grading_instance: @grading_instance %>
+</div>

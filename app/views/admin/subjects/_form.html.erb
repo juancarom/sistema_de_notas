@@ -1,0 +1,10 @@
+<%= simple_form_for [:admin, subject] do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :name,   label: "Nombre" %>
+  <%= f.input :code,   label: "Código (opcional)" %>
+  <%= f.input :active, label: "Activa" %>
+  <div class="flex gap-3 mt-4">
+    <%= f.button :submit, subject.new_record? ? "Crear materia" : "Guardar cambios" %>
+    <%= link_to "Cancelar", admin_subjects_path, class: "px-4 py-2 text-sm text-gray-600 hover:text-gray-800" %>
+  </div>
+<% end %>

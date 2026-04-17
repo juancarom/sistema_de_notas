@@ -1,0 +1,23 @@
+<% content_for :title, "Mis Cursos" %>
+
+<div class="mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">Mis Cursos</h1>
+  <p class="text-gray-500 mt-1"><%= current_school.name %> · Ciclo <%= Date.today.year %></p>
+</div>
+
+<% if @courses.any? %>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <% @courses.each do |course| %>
+      <%= link_to teachers_course_path(course), class: "bg-white rounded-xl shadow hover:shadow-md transition p-5 block" do %>
+        <div class="font-bold text-gray-800 text-lg"><%= course.name %></div>
+        <div class="text-sm text-gray-500 mt-1"><%= course.study_plan.name %></div>
+        <div class="text-xs text-gray-400 mt-1"><%= course.shift_label %> · <%= course.academic_year %></div>
+        <div class="mt-3 text-xs text-indigo-600">Ver planilla de notas →</div>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="bg-white rounded-xl shadow p-8 text-center">
+    <p class="text-gray-400">No tenés cursos asignados para este ciclo.</p>
+  </div>
+<% end %>

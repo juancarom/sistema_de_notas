@@ -1,0 +1,24 @@
+<%= simple_form_for [:admin, user] do |f| %>
+  <%= f.error_notification %>
+  <div class="grid grid-cols-2 gap-x-4">
+    <%= f.input :name,    label: "Nombre",   required: true %>
+    <%= f.input :surname, label: "Apellido", required: true %>
+  </div>
+  <%= f.input :email, label: "Email", required: true %>
+  <%= f.input :dni,   label: "DNI" %>
+  <%= f.input :birth_date, label: "Fecha de nacimiento", as: :date %>
+  <%= f.input :phone,   label: "Teléfono" %>
+  <%= f.input :address, label: "Dirección" %>
+  <%= f.input :city,    label: "Ciudad" %>
+
+  <div class="border-t border-gray-100 my-4"></div>
+  <p class="text-sm text-gray-500 mb-3">Dejá en blanco para no cambiar la contraseña.</p>
+  <%= f.input :password,              label: "Contraseña",           required: false %>
+  <%= f.input :password_confirmation, label: "Confirmar contraseña", required: false %>
+
+  <div class="flex gap-3 mt-4">
+    <%= f.button :submit, user.new_record? ? "Crear usuario" : "Guardar cambios" %>
+    <%= link_to "Cancelar", user.new_record? ? admin_users_path : admin_user_path(user),
+          class: "px-4 py-2 text-sm text-gray-600 hover:text-gray-800" %>
+  </div>
+<% end %>
