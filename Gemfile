@@ -15,7 +15,7 @@ gem "devise", "~> 4.9"
 gem "pundit", "~> 2.3"
 
 # Multi-tenancy via subdomain
-gem "acts_as_tenant", "~> 0.6"
+gem "acts_as_tenant", "~> 1.0"
 
 # Soft delete
 gem "discard", "~> 1.3"
