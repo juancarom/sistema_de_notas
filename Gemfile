@@ -27,7 +27,7 @@ gem "tailwindcss-rails"
 gem "simple_form", "~> 5.3"
 
 # Pagination
-gem "pagy", "~> 8.0"
+gem "pagy", "~> 43.5"
 
 # Background jobs (Rails 8 built-in, no Redis needed)
 gem "solid_cache"
